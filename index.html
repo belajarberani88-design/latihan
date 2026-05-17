@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ujian Online: Pemrograman Berorientasi Objek & Java GUI</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- HEADER / NAVIGATION BAR -->
+    <header class="bg-indigo-900 text-white shadow-md sticky top-0 z-50 transition-all">
+        <div class="max-content container mx-auto px-4 py-3 flex flex-wrap justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white p-2 rounded-lg text-indigo-900 font-bold text-xl shadow">
+                    ☕
+                </div>
+                <div>
+                    <h1 class="font-bold text-sm md:text-lg leading-tight tracking-wide">E-Exam: Pemrograman Berorientasi Objek & GUI</h1>
+                    <p class="text-xs text-indigo-200">Ujian Teori & Praktik Rekayasa Perangkat Lunak</p>
+                </div>
+            </div>
+            
+            <div id="exam-timer-wrapper" class="hidden flex items-center space-x-4 mt-2 md:mt-0">
+                <div class="bg-indigo-800/80 px-3 py-1.5 rounded-lg border border-indigo-700 flex items-center space-x-2">
+                    <span class="text-xs text-indigo-200">Siswa:</span>
+                    <span id="display-student-info" class="text-xs md:text-sm font-semibold text-white">Guest</span>
+                </div>
+                <div class="bg-amber-500 text-slate-950 px-4 py-1.5 rounded-lg font-mono font-bold text-sm md:text-base flex items-center space-x-1 shadow shadow-amber-500/20 animate-pulse">
+                    <span>⏱️</span>
+                    <span id="timer-countdown">90:00</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 py-6 max-w-7xl">
+        
+        <!-- 1. IDENTITAS SCREEN (LOGIN) -->
+        <section id="identity-section" class="max-w-xl mx-auto my-12 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+            <div class="bg-gradient-to-r from-indigo-800 to-indigo-950 p-6 text-white text-center">
+                <h2 class="text-2xl font-extrabold tracking-tight">Lembar Identitas Siswa</h2>
+                <p class="text-indigo-200 text-sm mt-1">Silakan isi formulir di bawah ini dengan lengkap sebelum memulai ujian online.</p>
+            </div>
+            <div class="p-8 space-y-6">
+                <!-- Banner Info Ujian -->
+                <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-r-lg text-xs md:text-sm text-indigo-900 leading-relaxed space-y-1">
+                    <p class="font-bold">📋 Petunjuk Ujian:</p>
+                    <p>• Ujian terdiri dari <strong>50 Soal Pilihan Ganda</strong> (A s.d. E) dan <strong>5 Soal Essay HOTS</strong>.</p>
+                    <p>• Waktu pengerjaan adalah <strong>90 menit</strong> sejak tombol "Mulai Ujian" ditekan.</p>
+                    <p>• Jawaban disimpan secara otomatis pada sistem lembar kerja Anda.</p>
+                </div>
+
+                <form id="identity-form" class="space-y-4">
+                    <div>
+                        <label for="tnama" class="block text-sm font-semibold text-slate-700 mb-1">Nama Lengkap <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">👤</span>
+                            <input type="text" id="tnama" name="tnama" required
+                                class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-medium transition"
+                                placeholder="Masukkan nama lengkap Anda...">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="kelas" class="block text-sm font-semibold text-slate-700 mb-1">Kelas <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">🏫</span>
+                            <select id="kelas" name="kelas" required
+                                class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-medium transition appearance-none">
+                                <option value="" disabled selected>Pilih Kelas Anda...</option>
+                                <option value="XI RPL 1">XI RPL 1</option>
+                                <option value="XI RPL 2">XI RPL 2</option>
+                                <option value="XI RPL 3">XI RPL 3</option>
+                                <option value="XII RPL 1">XII RPL 1</option>
+                                <option value="XII RPL 2">XII RPL 2</option>
+                                <option value="XII RPL 3">XII RPL 3</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:shadow-indigo-500/20 transition duration-150 transform hover:-translate-y-0.5 active:translate-y-0 flex justify-center items-center space-x-2">
+                        <span>Mulai Ujian Sekarang</span>
+                        <span>🚀</span>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- 2. EXAM MAIN DASHBOARD (HIDDEN BY DEFAULT) -->
+        <section id="exam-dashboard" class="hidden grid grid-cols-1 lg:grid-cols-4 gap-6">
+            
+            <!-- LEFT PANEL: QUESTION NAVIGATOR -->
+            <div class="lg:col-span-1 bg-white p-5 rounded-2xl shadow-md border border-slate-100 flex flex-col h-fit lg:sticky lg:top-24 max-h-[85vh]">
+                <div class="mb-4">
+                    <h3 class="font-bold text-slate-900 flex items-center space-x-2">
+                        <span>🗺️</span>
+                        <span>Peta Navigasi Soal</span>
+                    </h3>
+                    <p class="text-xs text-slate-500 mt-1">Gunakan kotak di bawah untuk melompat ke nomor soal tertentu.</p>
+                </div>
+
+                <!-- Nav Filters -->
+                <div class="flex justify-between text-[11px] mb-3 bg-slate-100 p-1.5 rounded-lg font-medium text-slate-600">
+                    <div class="flex items-center space-x-1">
+                        <span class="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
+                        <span id="stat-answered">0/50 PG</span>
+                    </div>
+                    <div class="flex items-center space-x-1">
+                        <span class="inline-block w-2 h-2 rounded-full bg-slate-300"></span>
+                        <span id="stat-unanswered">50 PG</span>
+                    </div>
+                </div>
+
+                <!-- Navigation Grid wrapper (Scrollable if overflow) -->
+                <div class="overflow-y-auto pr-1 flex-grow max-h-[350px]">
+                    <!-- Pilihan Ganda -->
+                    <div class="mb-4">
+                        <h4 class="text-xs font-bold text-indigo-700 uppercase tracking-wider mb-2">Pilihan Ganda</h4>
+                        <div id="grid-pg-container" class="grid grid-cols-5 sm:grid-cols-6 lg:grid-cols-5 gap-2">
+                            <!-- Dynamic Numbers 1-50 -->
+                        </div>
+                    </div>
+
+                    <!-- Essay HOTS -->
+                    <div class="border-t border-slate-100 pt-3">
+                        <h4 class="text-xs font-bold text-purple-700 uppercase tracking-wider mb-2">Essay HOTS</h4>
+                        <div id="grid-essay-container" class="grid grid-cols-5 gap-2">
+                            <!-- Dynamic Essay Numbers 1-5 -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Button at Bottom of Sidebar -->
+                <div class="mt-6 pt-4 border-t border-slate-100 space-y-2">
+                    <button id="btn-submit-exam" onclick="confirmSubmitExam()"
+                        class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 px-4 rounded-xl text-sm transition-all shadow shadow-rose-600/15 flex justify-center items-center space-x-2">
+                        <span>📥</span>
+                        <span>Selesaikan Ujian</span>
+                    </button>
+                    <p class="text-[10px] text-center text-slate-400">Pastikan memeriksa kembali semua lembar jawaban Anda.</p>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL: QUESTION CONTAINER -->
+            <div class="lg:col-span-3 flex flex-col space-y-6">
+                
+                <!-- CURRENT QUESTION CARD -->
+                <div id="question-card" class="bg-white p-6 md:p-8 rounded-2xl shadow-md border border-slate-100 flex flex-col min-h-[400px] justify-between relative">
+                    
+                    <!-- Question Header Info -->
+                    <div class="flex justify-between items-center border-b border-slate-100 pb-4 mb-5">
+                        <span id="question-badge-type" class="bg-indigo-100 text-indigo-800 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
+                            Pilihan Ganda (10 Poin)
+                        </span>
+                        <div class="flex items-center space-x-2 text-sm text-slate-500">
+                            <span>Soal Ke-</span>
+                            <strong id="display-question-number" class="text-slate-800 text-lg font-extrabold">1</strong>
+                            <span>dari</span>
+                            <strong class="text-slate-800 font-bold">55</strong>
+                        </div>
+                    </div>
+
+                    <!-- Question Body -->
+                    <div class="flex-grow space-y-6">
+                        <!-- Question Text -->
+                        <div id="question-text" class="text-slate-800 font-medium leading-relaxed text-sm md:text-base">
+                            <!-- Question loads here -->
+                        </div>
+
+                        <!-- Code / Code block snippet container (Only shown if question contains code) -->
+                        <div id="question-code-block" class="hidden font-mono bg-slate-900 text-amber-400 p-4 rounded-xl text-xs overflow-x-auto whitespace-pre leading-normal border border-slate-800">
+                            <!-- Code snippet loaded dynamically -->
+                        </div>
+
+                        <!-- Answer Options Container (Pilihan Ganda) -->
+                        <div id="options-container" class="space-y-3">
+                            <!-- Dynamic Options A, B, C, D, E -->
+                        </div>
+
+                        <!-- Essay Answer Area (Essay Only) -->
+                        <div id="essay-container" class="hidden space-y-2">
+                            <label for="essay-answer-input" class="block text-sm font-semibold text-slate-700">Tulis Jawaban Analisis Anda Di Sini <span class="text-red-500">*</span></label>
+                            <textarea id="essay-answer-input" rows="8"
+                                class="w-full p-4 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-sm font-mono leading-relaxed"
+                                placeholder="Tuliskan analisis, kode penyelesaian, atau deskripsi logis secara sistematis sesuai dengan instruksi soal..."></textarea>
+                            <p class="text-xs text-slate-400">⚠️ Jawaban tersimpan otomatis saat Anda berpindah soal atau menekan tombol navigasi.</p>
+                        </div>
+                    </div>
+
+                    <!-- Question Footer Buttons -->
+                    <div class="flex flex-col sm:flex-row justify-between items-center border-t border-slate-100 pt-5 mt-8 gap-4">
+                        <button id="btn-prev-question" onclick="navigateQuestion(-1)"
+                            class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 px-5 rounded-lg text-sm transition flex justify-center items-center space-x-2">
+                            <span>⬅️</span>
+                            <span>Kembali</span>
+                        </button>
+
+                        <!-- Ragu Ragu Checkbox button -->
+                        <button id="btn-doubt" onclick="toggleDoubtState()"
+                            class="w-full sm:w-auto bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-800 font-semibold py-2.5 px-5 rounded-lg text-sm transition flex justify-center items-center space-x-2">
+                            <input type="checkbox" id="doubt-checkbox" class="rounded text-amber-600 focus:ring-amber-500 pointer-events-none">
+                            <span>Ragu - Ragu</span>
+                        </button>
+
+                        <button id="btn-next-question" onclick="navigateQuestion(1)"
+                            class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-5 rounded-lg text-sm transition flex justify-center items-center space-x-2">
+                            <span>Selanjutnya</span>
+                            <span>➡️</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+        <!-- 3. RESULT SCREEN (HIDDEN BY DEFAULT) -->
+        <section id="result-section" class="hidden max-w-4xl mx-auto my-6 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+            <div class="bg-gradient-to-r from-emerald-600 to-emerald-800 p-8 text-white text-center">
+                <span class="text-5xl">🎉</span>
+                <h2 class="text-3xl font-extrabold tracking-tight mt-2">Ujian Berhasil Diselesaikan!</h2>
+                <p class="text-emerald-100 text-sm mt-1">Terima kasih telah berpartisipasi. Hasil ringkasan jawaban Anda telah dihitung.</p>
+            </div>
+
+            <div class="p-8 space-y-8">
+                <!-- Info Siswa -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <div>
+                        <span class="text-xs text-slate-400 uppercase font-bold tracking-wider">Nama Peserta</span>
+                        <p id="res-student-name" class="text-lg font-bold text-slate-800">-</p>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-400 uppercase font-bold tracking-wider">Kelas</span>
+                        <p id="res-student-class" class="text-lg font-bold text-slate-800">-</p>
+                    </div>
+                </div>
+
+                <!-- Live Score Dashboard -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                    <div class="bg-indigo-50 border border-indigo-100 p-5 rounded-2xl">
+                        <span class="text-3xl">🎯</span>
+                        <h4 class="text-xs font-bold text-indigo-700 uppercase tracking-wide mt-2">Skor Pilihan Ganda</h4>
+                        <p class="text-3xl font-black text-indigo-900 mt-1" id="res-score">0 / 100</p>
+                        <p class="text-[10px] text-slate-500 mt-1">(Setiap soal PG bernilai 2 poin)</p>
+                    </div>
+                    <div class="bg-teal-50 border border-teal-100 p-5 rounded-2xl">
+                        <span class="text-3xl">✅</span>
+                        <h4 class="text-xs font-bold text-teal-700 uppercase tracking-wide mt-2">Benar (PG)</h4>
+                        <p class="text-3xl font-black text-teal-900 mt-1" id="res-correct">0</p>
+                        <p class="text-[10px] text-slate-500 mt-1">Dari total 50 Soal PG</p>
+                    </div>
+                    <div class="bg-rose-50 border border-rose-100 p-5 rounded-2xl">
+                        <span class="text-3xl">❌</span>
+                        <h4 class="text-xs font-bold text-rose-700 uppercase tracking-wide mt-2">Salah / Kosong</h4>
+                        <p class="text-3xl font-black text-rose-900 mt-1" id="res-incorrect">0</p>
+                        <p class="text-[10px] text-slate-500 mt-1">Dari total 50 Soal PG</p>
+                    </div>
+                </div>
+
+                <!-- Alert Essay Evaluasi Manual -->
+                <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg text-xs md:text-sm text-amber-900 leading-relaxed">
+                    <p class="font-bold">✍️ Catatan Evaluasi Jawaban Essay HOTS:</p>
+                    <p class="mt-1">Nilai di atas hanya mencakup rekapitulasi penilaian otomatis dari <strong>50 Soal Pilihan Ganda</strong>. Jawaban untuk <strong>5 Soal Essay HOTS</strong> Anda telah disimpan dengan aman dan memerlukan koreksi manual oleh instruktur pengajar guna memeriksa logika penyelesaian algoritma serta desain rancangan.</p>
+                </div>
+
+                <!-- Tinjauan Jawaban Essay -->
+                <div class="space-y-4">
+                    <h3 class="font-extrabold text-slate-800 text-lg border-b border-slate-100 pb-2">Tinjauan Hasil Jawaban Essay HOTS</h3>
+                    <div id="res-essay-list" class="space-y-4">
+                        <!-- Loaded dynamically via JS -->
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row justify-center items-center gap-4">
+                    <button onclick="window.print()"
+                        class="w-full sm:w-auto bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-6 rounded-xl text-sm transition flex items-center justify-center space-x-2 shadow-md">
+                        <span>🖨️</span>
+                        <span>Cetak Bukti Ujian</span>
+                    </button>
+                    <button onclick="window.location.reload()"
+                        class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl text-sm transition flex items-center justify-center space-x-2 shadow-md">
+                        <span>🔄</span>
+                        <span>Ulangi Ujian</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. CUSTOM CONFIRMATION MODAL -->
+        <div id="custom-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full border border-slate-100 overflow-hidden transform scale-95 transition-transform duration-200">
+                <div class="p-6 text-center">
+                    <span class="text-4xl inline-block mb-3" id="modal-icon">⚠️</span>
+                    <h3 class="text-xl font-bold text-slate-900" id="modal-title">Konfirmasi Pengiriman</h3>
+                    <p class="text-sm text-slate-500 mt-2 leading-relaxed" id="modal-message">Apakah Anda yakin ingin menyelesaikan ujian sekarang? Jawaban yang dikirim tidak dapat diubah kembali.</p>
+                </div>
+                <div class="bg-slate-50 px-6 py-4 flex flex-col sm:flex-row-reverse justify-start gap-2 border-t border-slate-100">
+                    <button id="modal-btn-confirm" class="w-full sm:w-auto bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition">
+                        Ya, Selesaikan
+                    </button>
+                    <button id="modal-btn-cancel" onclick="closeModal()" class="w-full sm:w-auto bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 px-4 rounded-lg text-sm transition">
+                        Batal
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-100 border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-500">
+        <div class="container mx-auto px-4">
+            <p>© 2026 E-Exam Board System. Terinspirasi dari kerangka kerja Java Swing & NetBeans IDE.</p>
+        </div>
+    </footer>
+
+    <!-- JAVA SWING & PBO QUESTION BANK (50 Multiple Choice & 5 HOTS Essays) -->
+    <script>
+        // Data Bank Soal (50 Pilihan Ganda)
+        const PG_QUESTIONS = [
+            {
+                q: "Di dalam NetBeans IDE, berkas rancangan GUI yang dibuat menggunakan editor desain Swing biasanya disimpan dengan ekstensi berkas ganda. Ekstensi tersebut adalah...",
+                code: "",
+                o: [
+                    "A. .java dan .form",
+                    "B. .java dan .class",
+                    "C. .class dan .form",
+                    "D. .jar dan .java",
+                    "E. .fxml dan .java"
+                ],
+                a: 0 // A
+            },
+            {
+                q: "Manakah dari kelas berikut yang bertindak sebagai kontainer tingkat tinggi (top-level container) utama untuk membuat jendela desktop dalam Java Swing?",
+                code: "",
+                o: [
+                    "A. JPanel",
+                    "B. JDialog",
+                    "C. JComponent",
+                    "D. JFrame",
+                    "E. JWindow"
+                ],
+                a: 3 // D
+            },
+            {
+                q: "Berdasarkan gambar palet NetBeans Swing, komponen yang digunakan khusus untuk memilih satu opsi pilihan dari sekelompok pilihan alternatif adalah...",
+                code: "",
+                o: [
+                    "A. JCheckBox",
+                    "B. JRadioButton",
+                    "C. JToggleButton",
+                    "D. JComboBox",
+                    "E. JTextField"
+                ],
+                a: 1 // B
+            },
+            {
+                q: "Untuk memastikan agar beberapa JRadioButton hanya bisa dipilih salah satu saja (mutual exclusion), maka setiap objek JRadioButton harus dikelompokkan ke dalam satu grup menggunakan komponen...",
+                code: "",
+                o: [
+                    "A. ButtonGroup",
+                    "B. JTabbedPane",
+                    "C. JPanel",
+                    "D. JList",
+                    "E. JSplitPane"
+                ],
+                a: 0 // A
+            },
+            {
+                q: "Perhatikan potongan baris kode berikut:\n```java\njFrame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);\n```\nApakah arti atau fungsi dari parameter 'EXIT_ON_CLOSE' tersebut?",
+                code: "",
+                o: [
+                    "A. Menyembunyikan jendela saja tanpa menghentikan jalannya aplikasi Java.",
+                    "B. Menghapus objek jendela dari memori tanpa menutup aplikasi.",
+                    "C. Menutup jendela secara instan dan menghentikan seluruh proses virtual machine (JVM) Java yang berjalan.",
+                    "D. Membuka jendela baru saat jendela utama ditutup.",
+                    "E. Melakukan proses pengecekan validasi data sebelum aplikasi keluar secara otomatis."
+                ],
+                a: 2 // C
+            },
+            {
+                q: "Metode manakah dalam siklus pemrograman GUI Java Swing yang digunakan untuk mengatur agar jendela JFrame tampil tepat di tengah-tengah layar monitor komputer?",
+                code: "",
+                o: [
+                    "A. jFrame1.setSize(400, 300);",
+                    "B. jFrame1.setLocationRelativeTo(null);",
+                    "C. jFrame1.setVisible(true);",
+                    "D. jFrame1.setBounds(0, 0, 100, 100);",
+                    "E. jFrame1.pack();"
+                ],
+                a: 1 // B
+            },
+            {
+                q: "Komponen Swing manakah yang digunakan untuk menampilkan teks statis atau gambar label di dalam bingkai jendela GUI?",
+                code: "",
+                o: [
+                    "A. JTextField",
+                    "B. JButton",
+                    "C. JTextArea",
+                    "D. JLabel",
+                    "E. JPasswordField"
+                ],
+                a: 3 // D
+            },
+            {
+                q: "Perhatikan gambar editor pada soal. Untuk mengizinkan user memasukkan baris teks pendek dalam satu baris, komponen manakah yang paling sesuai?",
+                code: "",
+                o: [
+                    "A. JTextArea",
+                    "B. JEditorPane",
+                    "C. JTextField",
+                    "D. JTextPane",
+                    "E. JFormattedTextField"
+                ],
+                a: 2 // C
+            },
+            {
+                q: "Apa nama paket (package) utama yang harus diimpor di bagian atas kode Java untuk menggunakan pustaka GUI standar Java Swing?",
+                code: "",
+                o: [
+                    "A. java.awt.*",
+                    "B. javax.swing.*",
+                    "C. java.gui.*",
+                    "D. java.swing.awt.*",
+                    "E. javax.gui.swing.*"
+                ],
+                a: 1 // B
+            },
+            {
+                q: "Komponen JToggleButton bertindak sebagai tombol dengan dua keadaan state interaksi. Manakah status pengembalian fungsi boolean yang menandakan tombol ini sedang dalam kondisi ditekan / aktif?",
+                code: "",
+                o: [
+                    "A. isEnabled() == true",
+                    "B. isSelected() == true",
+                    "C. isActive() == true",
+                    "D. isPressed() == true",
+                    "E. isFocused() == true"
+                ],
+                a: 1 // B
+            },
+            {
+                q: "Manakah konsep pilar dasar PBO (Object-Oriented Programming) yang merujuk pada penyembunyian detail implementasi internal objek dengan menyediakan akses hanya lewat metode getter dan setter?",
+                code: "",
+                o: [
+                    "A. Pewarisan (Inheritance)",
+                    "B. Polimorfisme (Polymorphism)",
+                    "C. Enkapsulasi (Encapsulation)",
+                    "D. Abstraksi (Abstraction)",
+                    "E. Konstruktor (Constructor)"
+                ],
+                a: 2 // C
+            },
+            {
+                q: "Kata kunci (keyword) manakah yang digunakan di Java untuk membuat kelas anak (subclass) mewarisi atribut dan metode dari kelas induk (superclass)?",
+                code: "",
+                o: [
+                    "A. implements",
+                    "B. extends",
+                    "C. inherits",
+                    "D. super",
+                    "E. import"
+                ],
+                a: 1 // B
+            },
+            {
+                q: "Metode konstruktor (Constructor) pada bahasa pemrograman Java memiliki ciri khas utama yang membedakannya dengan metode biasa, yaitu...",
+                code: "",
+                o: [
+                    "A. Harus selalu dideklarasikan menggunakan kata kunci private.",
+                    "B. Memiliki tipe data kembalian berupa String atau void.",
+                    "C. Nama metode harus persis sama dengan nama kelasnya dan tidak memiliki tipe data kembalian.",
+                    "D. Hanya dapat dipanggil setelah program Java selesai didekompilasi.",
+                    "E. Wajib dituliskan di dalam blok interface."
+                ],
+                a: 2 // C
+            },
+            {
+                q: "Apa fungsi dari kata kunci 'super' ketika dituliskan di dalam metode konstruktor kelas anak (subclass)?",
+                code: "",
+                o: [
+                    "A. Untuk mengakhiri siklus hidup dari instansiasi kelas induk secara paksa.",
+                    "B. Untuk membuat instansiasi kelas anak menjadi statis di memori.",
+                    "C. Untuk memanggil metode konstruktor dari kelas induk (superclass).",
+                    "D. Untuk mendefinisikan variabel global di dalam paket utama.",
+                    "E. Untuk membatasi akses enkapsulasi kelas."
+                ],
+                a: 2 // C
+            },
+            {
+                q: "Perhatikan potongan kode Java berikut:\n```java\npublic class Kendaraan {\n    public void jalankan() {\n        System.out.println(\"Kendaraan berjalan\");\n    }\n}\npublic class Mobil extends Kendaraan {\n    @Override\n    public void jalankan() {\n        System.out.println(\"Mobil melaju cepat\");\n    }\n}\n```\nKonsep implementasi PBO di atas merepresentasikan...",
+                code: "",
+                o: [
+                    "A. Method Overloading",
+                    "B. Method Overriding",
+                    "C. Enkapsulasi Data",
+                    "D. Multi-level Interfaces",
+                    "E. Class Constructor"
+                ],
+                a: 1 // B
+            },
+            {
+                q: "Apa perbedaan mendasar antara Method Overloading dengan Method Overriding di Java?",
+                code: "",
+                o: [
+                    "A. Overloading terjadi dalam satu kelas dengan nama metode sama tapi parameter berbeda; Overriding terjadi pada kelas anak dengan tanda tangan metode yang sama persis seperti di kelas induk.",
+                    "B. Overloading terjadi pada kelas anak saja; Overriding hanya diperbolehkan pada kelas induk.",
+                    "C. Overloading mewajibkan penggunaan kata kunci extends; Overriding memerlukan kata kunci implements.",
+                    "D. Overloading menghasilkan galat (error) kompilasi; Overriding adalah metode wajib di Java.",
+                    "E. Tidak ada perbedaan sama sekali karena keduanya adalah sinonim."
+                ],
+                a: 0 // A
+            },
+            {
+                q: "Manakah penulisan kode instansiasi objek yang benar di Java berdasarkan kelas bernama 'Karyawan'?",
+                code: "",
+                o: [
+                    "A. Karyawan k1 = Karyawan();",
+                    "B. new Karyawan k1 = class Karyawan();",
+                    "C. Karyawan k1 = new Karyawan();",
+                    "D. class Karyawan k1 = Karyawan.create();",
+                    "E. Karyawan: k1 = new Karyawan;"
+                ],
+                a: 2 // C
+            },
+            {
+                q: "Dalam pemrograman Java, variabel atau metode yang dideklarasikan dengan modifier akses 'private' hanya dapat diakses oleh...",
+                code: "",
+                o: [
+                    "A. Semua kelas yang berada di dalam package yang sama saja.",
+                    "B. Kelas itu sendiri tempat variabel/metode tersebut dideklarasikan.",
+                    "C. Semua sub-kelas anak (subclass) baik di dalam maupun di luar package.",
+                    "D. Seluruh kelas di manapun tanpa batasan apa pun.",
+                    "E. Hanya oleh kelas utama (Main class) saja."
+                ],
+                a: 1 // B
+            },
+            {
+                q: "Manakah pernyataan yang tepat mengenai konsep 'Interface' dalam bahasa pemrograman Java?",
+                code: "",
+                o: [
+                    "A. Interface adalah kelas konkret yang objeknya dapat langsung dibuat menggunakan operator new.",
+                    "B. Interface hanya dapat menyimpan atribut variabel lokal non-final.",
+                    "C. Sebuah kelas hanya diperbolehkan mengimplementasikan satu Interface saja.",
+                    "D. Interface berfungsi sebagai kontrak perilaku berupa deklarasi metode-metode abstrak yang wajib diimplementasikan oleh kelas turunannya.",
+                    "E. Interface tidak mendukung konsep polimorfisme."
+                ],
+                a: 3 // D
+            },
+            {
+                q: "Untuk mengimplementasikan suatu Interface bernama 'CetakData' ke dalam kelas bernama 'Mahasiswa', penulisan yang benar adalah...",
+                code: "",
+                o: [
+                    "A. class Mahasiswa extends CetakData",
+                    "B. class Mahasiswa implements CetakData",
+                    "C. class Mahasiswa inherits CetakData",
+                    "D. class Mahasiswa imports CetakData",
+                    "E. class Mahasiswa using CetakData"
+                ],
+                a: 1 // B
+            },
+            {
+                q: "Berdasarkan gambar, Anda melihat tata letak visual bernama 'AbsoluteLayout'. Apa karakteristik utama dari tipe Layout Manager ini?",
+                code: "",
+                o: [
+                    "A. Menyusun komponen secara otomatis mengalir horizontal berurutan.",
+                    "B. Menyusun komponen dalam bentuk baris dan kolom yang fleksibel.",
+                    "C. Menempatkan komponen pada posisi piksel tetap yang spesifik (koordinat x, y) sehingga komponen tidak akan bergeser saat ukuran jendela diubah.",
+                    "D. Memaksa komponen untuk selalu memenuhi seluruh area ruang JFrame.",
+                    "E. Menyusun komponen berdasarkan arah mata angin utama (North, South, East, West, Center)."
+                ],
+                a: 2 // C
+            },
+            {
+                q: "Layout Manager bawaan standar untuk kontainer JFrame di Java Swing, jika tidak diubah secara manual, adalah...",
+                code: "",
+                o: [
+                    "A. FlowLayout",
+                    "B. GridLayout",
+                    "C. BoxLayout",
+                    "D. BorderLayout",
+                    "E. GridBagLayout"
+                ],
+                a: 3 // D
+            },
+            {
+                q: "Komponen manakah yang digunakan untuk mengelompokkan beberapa komponen GUI secara logis ke dalam satu area terpisah di dalam JFrame?",
+                code: "",
+                o: [
+                    "A. JDialog",
+                    "B. JPanel",
+                    "C. JScrollPane",
+                    "D. JSplitPane",
+                    "E. JDesktopPane"
+                ],
+                a: 1 // B
+            },
+            {
+                q: "Untuk menangkap aksi penekanan tombol 'Simpan' pada aplikasi Java Swing, event listener apakah yang umum digunakan?",
+                code: "",
+                o: [
+                    "A. MouseMotionListener",
+                    "B. KeyListener",
+                    "C. ActionListener",
+                    "D. WindowListener",
+                    "E. ItemListener"
+                ],
+                a: 2 // C
+            },
+            {
+                q: "Metode wajib apa yang harus dideklarasikan saat kita mengimplementasikan antarmuka 'ActionListener'?",
+                code: "",
+                o: [
+                    "A. public void mouseClicked(MouseEvent e)",
+                    "B. public void keyPressed(KeyEvent e)",
+                    "C. public void actionPerformed(ActionEvent e)",
+                    "D. public void windowOpened(WindowEvent e)",
+                    "E. public void valueChanged(ListSelectionEvent e)"
+                ],
+                a: 2 // C
+            },
+            {
+                q: "Metode manakah di Java Swing yang digunakan untuk merubah teks label atau teks input area secara dinamis lewat kode?",
+                code: "",
+                o: [
+                    "A. getText()",
+                    "B. setText(String text)",
+                    "C. showText(String text)",
+                    "D. writeText(String text)",
+                    "E. appendText(String text)"
+                ],
+                a: 1 // B
+            },
+            {
+                q: "Bagaimanakah cara mengambil input string yang diketikkan pengguna di dalam komponen JTextField bernama 'tnama'?",
+                code: "",
+                o: [
+                    "A. String nama = tnama.getText();",
+                    "B. String nama = tnama.setText();",
+                    "C. String nama = tnama.value();",
+                    "D. String nama = (String) tnama.get();",
+                    "E. String nama = tnama.toString();"
+                ],
+                a: 0 // A
+            },
+            {
+                q: "Ketika membuat rancangan login, komponen manakah dari NetBeans Palette yang paling aman digunakan untuk mengisi kata sandi (password)?",
+                code: "",
+                o: [
+                    "A. JTextField",
+                    "B. JPasswordField",
+                    "C. JFormattedTextField",
+                    "D. JTextArea",
+                    "E. JEditorPane"
+                ],
+                a: 1 // B
+            },
+            {
+                q: "Untuk menampilkan kotak dialog pesan peringatan secara cepat ke layar, metode statis apa dari kelas JOptionPane yang dapat dipanggil?",
+                code: "",
+                o: [
+                    "A. JOptionPane.showConfirmDialog()",
+                    "B. JOptionPane.showInputDialog()",
+                    "C. JOptionPane.showMessageDialog()",
+                    "D. JOptionPane.showOptionDialog()",
+                    "E. JOptionPane.createDialog()"
+                ],
+                a: 2 // C
+            },
+            {
+                q: "Manakah dari kelas berikut yang digunakan untuk menggambar tabel data dinamis dalam aplikasi GUI Java Swing?",
+                code: "",
+                o: [
+                    "A. JList",
+                    "B. JTree",
+                    "C. JTable",
+                    "D. JGrid",
+                    "E. JTabbedPane"
+                ],
+                a: 2 // C
+            },
+            {
+                q: "Keyword manakah yang digunakan di Java untuk membuat instansi kelas tidak dapat diwariskan lagi oleh kelas lain?",
+                code: "",
+                o: [
+                    "A. static",
+                    "B. abstract",
+                    "C. final",
+                    "D. void",
+                    "E. transient"
+                ],
+                a: 2 // C
+            },
+            {
+                q: "Apabila suatu kelas dideklarasikan sebagai 'abstract class', maka kelas tersebut...",
+                code: "",
+                o: [
+                    "A. Tidak dapat diwariskan.",
+                    "B. Tidak dapat diinstansiasi langsung menjadi objek menggunakan operator new.",
+                    "C. Semua metodenya wajib mengembalikan nilai integer.",
+                    "D. Hanya dapat diimpor lewat pustaka pihak ketiga.",
+                    "E. Tidak diperbolehkan memiliki variabel."
+                ],
+                a: 1 // B
+            },
+            {
+                q: "Metode manakah di Java yang otomatis dieksekusi pertama kali oleh JVM saat aplikasi dijalankan?",
+                code: "",
+                o: [
+                    "A. public void start()",
+                    "B. public static void main(String[] args)",
+                    "C. public void run()",
+                    "D. public static void init()",
+                    "E. public void execute()"
+                ],
+                a: 1 // B
+            },
+            {
+                q: "Manakah tipe data di Java yang digunakan khusus untuk menampung data berupa satu karakter saja?",
+                code: "",
+                o: [
+                    "A. String",
+                    "B. char",
+                    "C. byte",
+                    "D. boolean",
+                    "E. float"
+                ],
+                a: 1 // B
+            },
+            {
+                q: "Error penulisan kode seperti lupa menuliskan tanda titik koma (;) pada baris kode Java digolongkan sebagai jenis kesalahan...",
+                code: "",
+                o: [
+                    "A. Runtime Error",
+                    "B. Logical Error",
+                    "C. Syntax (Compile) Error",
+                    "D. Exception Error",
+                    "E. Thread Error"
+                ],
+                a: 2 // C
+            },
+            {
+                q: "Struktur penanganan kesalahan (exception handling) di Java diimplementasikan menggunakan blok kata kunci...",
+                code: "",
+                o: [
+                    "A. try - catch - finally",
+                    "B. throws - throw - exception",
+                    "C. if - else - then",
+                    "D. do - while - loop",
+                    "E. switch - case - break"
+                ],
+                a: 0 // A
+            },
+            {
+                q: "Kelas pengecualian dasar (base exception class) untuk semua kesalahan yang terjadi secara dinamis saat runtime di Java adalah...",
+                code: "",
+                o: [
+                    "A. Error",
+                    "B. Throwable",
+                    "C. Exception",
+                    "D. RuntimeException",
+                    "E. IOException"
+                ],
+                a: 2 // C
+            },
+            {
+                q: "Untuk memicu sebuah exception buatan sendiri secara sengaja di dalam kode program Java, kita menggunakan kata kunci...",
+                code: "",
+                o: [
+                    "A. throws",
+                    "B. throw",
+                    "C. catch",
+                    "D. finally",
+                    "E. raise"
+                ],
+                a: 1 // B
+            },
+            {
+                q: "Manakah dari struktur berikut yang merupakan bagian dari Java Collections Framework untuk menyimpan elemen unik tanpa duplikasi data?",
+                code: "",
+                o: [
+                    "A. ArrayList",
+                    "B. Vector",
+                    "C. LinkedList",
+                    "D. HashSet",
+                    "E. Stack"
+                ],
+                a: 3 // D
+            },
+            {
+                q: "Metode apa yang digunakan untuk memasukkan item baru ke dalam objek struktur data ArrayList di Java?",
+                code: "",
+                o: [
+                    "A. push()",
+                    "B. insert()",
+                    "C. add()",
+                    "D. put()",
+                    "E. append()"
+                ],
+                a: 2 // C
+            },
+            {
+                q: "Dalam arsitektur model-view-controller (MVC) pada Java Swing, JTable biasanya dipasangkan dengan kelas model eksternal untuk mengelola baris data secara terstruktur, yaitu...",
+                code: "",
+                o: [
+                    "A. DefaultTableModel",
+                    "B. TableColumnModel",
+                    "C. DefaultListModel",
+                    "D. AbstractTableLayout",
+                    "E. TableViewModel"
+                ],
+                a: 0 // A
+            },
+            {
+                q: "Metode apa yang digunakan untuk membuat komponen GUI Java Swing yang semula disembunyikan agar nampak di layar komputer?",
+                code: "",
+                o: [
+                    "A. setVisible(true)",
+                    "B. setHidden(false)",
+                    "C. showGUI(true)",
+                    "D. setDisplay(true)",
+                    "E. setFocusable(true)"
+                ],
+                a: 0 // A
+            },
+            {
+                q: "Komponen Swing manakah yang tepat digunakan untuk menampilkan bilah pemuatan proses (loading indicator progress) di Java Swing?",
+                code: "",
+                o: [
+                    "A. JSlider",
+                    "B. JProgressBar",
+                    "C. JScrollBar",
+                    "D. JSpinner",
+                    "E. JSeparator"
+                ],
+                a: 1 // B
+            },
+            {
+                q: "Event JRadioButton dipicu sewaktu pengguna beralih opsi pilihan. Event tersebut adalah...",
+                code: "",
+                o: [
+                    "A. ActionEvent",
+                    "B. ItemEvent",
+                    "C. FocusEvent",
+                    "D. MenuEvent",
+                    "E. ListSelectionEvent"
+                ],
+                a: 1 // B
+            },
+            {
+                q: "Manakah dari berikut yang merujuk pada kelas untuk memasukkan angka dalam rentang tertentu secara teratur melalui tombol panah naik dan turun?",
+                code: "",
+                o: [
+                    "A. JSlider",
+                    "B. JSpinner",
+                    "C. JProgressBar",
+                    "D. JFormattedTextField",
+                    "E. JSplitPane"
+                ],
+                a: 1 // B
+            },
+            {
+                q: "Metode pack() pada objek kelas JFrame berfungsi untuk...",
+                code: "",
+                o: [
+                    "A. Mengompresi seluruh file kelas menjadi format arsip .jar.",
+                    "B. Mengubah seluruh konfigurasi tema GUI menjadi default sistem operasi (Look and Feel).",
+                    "C. Menghitung otomatis ukuran jendela JFrame agar pas menyesuaikan ukuran komponen-komponen anak di dalamnya.",
+                    "D. Melindungi enkripsi source-code dari proses reverse engineering.",
+                    "E. Menghubungkan JFrame ke database MySQL secara langsung."
+                ],
+                a: 2 // C
+            },
+            {
+                q: "Pernyataan manakah yang paling benar mengenai sifat multithreading pada antarmuka Java Swing?",
+                code: "",
+                o: [
+                    "A. Java Swing sepenuhnya aman dijalankan dari utas (thread) mana saja secara acak.",
+                    "B. Semua manipulasi UI Swing harus dilakukan secara aman dalam Event Dispatch Thread (EDT).",
+                    "C. Swing menonaktifkan semua penggunaan proses multithreading.",
+                    "D. Hanya komponen JButton saja yang boleh diakses dari luar EDT.",
+                    "E. EDT hanya bekerja pada compiler lawas."
+                ],
+                a: 1 // B
+            },
+            {
+                q: "Metode utilitas statis apa yang digunakan untuk membungkus jalannya tugas GUI Java Swing ke dalam jalur aman Event Dispatch Thread (EDT)?",
+                code: "",
+                o: [
+                    "A. Thread.sleep()",
+                    "B. SwingUtilities.invokeLater()",
+                    "C. System.runFinalization()",
+                    "D. Runtime.getRuntime().exec()",
+                    "E. EventQueue.stop()"
+                ],
+                a: 1 // B
+            },
+            {
+                q: "Untuk membatasi panjang input karakter pada sebuah JTextField, langkah penanganan yang tepat di tingkat kode adalah menggunakan kelas...",
+                code: "",
+                o: [
+                    "A. DocumentFilter",
+                    "B. ActionFilter",
+                    "C. InputVerifier",
+                    "D. ComponentListener",
+                    "E. FocusListener"
+                ],
+                a: 0 // A
+            },
+            {
+                q: "Sistem pewarnaan komponen latar belakang di Java Swing dikontrol menggunakan metode setBackground(). Kelas warna yang tepat untuk dikirim sebagai parameter masukan adalah...",
+                code: "",
+                o: [
+                    "A. java.awt.Color",
+                    "B. javax.swing.Color",
+                    "C. java.gui.Color",
+                    "D. java.graphics.Color",
+                    "E. javax.swing.border.Color"
+                ],
+                a: 0 // A
+            }
+        ];
+
+        // Data Bank Soal Essay (5 HOTS Essays)
+        const ESSAY_QUESTIONS = [
+            {
+                q: "<strong>ESSAY HOTS 1 (Analisis Keamanan & Validasi Input GUI):</strong><br>Perhatikan rancangan form pada gambar NetBeans. Anda diminta membuat program untuk menekan tombol <strong>Simpan</strong>. Analisislah risiko keamanan dan logika jika pengguna tidak mengisi field 'NAMA' (kosong) atau memasukkan input karakter ilegal (misal simbol SQL Injection). Buatlah rancangan potongan kode validasi Java Swing lengkap menggunakan <code>JOptionPane</code> untuk memblokir penyimpanan data kosong serta menangani pembersihan whitespace menggunakan fungsi regular expression (regex)!",
+                code: "private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {\n    // Tulis analisis kerentanan dan potongan kode validasi di bawah ini\n}"
+            },
+            {
+                q: "<strong>ESSAY HOTS 2 (Evaluasi Struktur Class & Polimorfisme):</strong><br>Dalam merancang aplikasi 'Form Karyawan', seorang programmer junior membuat kelas konkret yang kaku untuk setiap kategori jabatan (misal: <code>KaryawanTetap</code>, <code>KaryawanKontrak</code>). Evaluasilah mengapa pendekatan ini kurang optimal jika perusahaan ingin menambahkan tipe karyawan baru di masa depan secara dinamis. Rancanglah arsitektur kelas yang lebih fleksibel dengan menerapkan konsep <strong>Abstract Class</strong> atau <strong>Interface</strong> dan tunjukkan contoh kode implementasi polimorfismenya di Java!",
+                code: ""
+            },
+            {
+                q: "<strong>ESSAY HOTS 3 (Analisis Tata Letak & Responsivitas Layout):</strong><br>Berdasarkan gambar di navigator panel kiri, form tersebut menggunakan komponen <code>AbsoluteLayout</code>. Menganalisis apa yang akan terjadi pada susunan letak komponen <code>jLabel</code>, <code>jTextField</code>, dan tombol di dalam kontainer jika aplikasi tersebut dijalankan pada resolusi layar monitor yang berbeda (misal: layar ponsel kecil vs monitor 4K) atau ketika ukuran jendela ditarik (resized). Berikan argumen logis mengapa layout manager standar (seperti <code>GridBagLayout</code> atau <code>BorderLayout</code>) jauh lebih direkomendasikan dan bagaimana cara merestrukturisasinya!",
+                code: ""
+            },
+            {
+                q: "<strong>ESSAY HOTS 4 (Logika Desain State & Sinkronisasi Komponen):</strong><br>Lihat komponen <code>jToggleButton1</code> dan grup <code>jRadioButton</code> (Laki-laki & Perempuan) pada gambar. Anda dituntut membuat logika kontrol di mana jika <code>jToggleButton1</code> berada dalam posisi 'OFF', maka seluruh input radio button jenis kelamin langsung terkunci (disabled) dan otomatis ter-reset pilihannya. Sebaliknya, saat 'ON', radio button terbuka kembali. Gambarkan diagram alir (flowchart logic) penanganan state ini dan tuliskan potongan baris kode event listener Java Swing-nya!",
+                code: "private void jToggleButton1StateChanged(java.awt.event.ItemEvent evt) {\n    // Tuliskan logika kontrol sinkronisasi komponen\n}"
+            },
+            {
+                q: "<strong>ESSAY HOTS 5 (Pencegahan Kebocoran Memori & Manajemen Koneksi):</strong><br>Bayangkan tombol 'Simpan' pada aplikasi tersebut bertugas menyimpan data inputan nama dan jenis kelamin langsung ke database MySQL server. Apabila terjadi kegagalan jaringan di tengah proses penyimpanan, aplikasi seringkali mengalami 'hang' (freeze/tidak merespon). Analisislah mengapa fenomena ini terjadi (kaitkan dengan konsep Utas Utama / Event Dispatch Thread) dan bagaimana cara mengatasinya menggunakan fitur multithreading <code>SwingWorker</code> serta penanganan blok exception <code>try-with-resources</code>!",
+                code: ""
+            }
+        ];
+
+        // State Aplikasi
+        let currentQuestionIndex = 0; // 0 s.d. 49 = PG, 50 s.d. 54 = Essay
+        let studentAnswersPG = Array(50).fill(null); // Nilai indeks jawaban pilihan ganda
+        let studentAnswersEssay = Array(5).fill(""); // Nilai teks jawaban essay
+        let doubtStates = Array(55).fill(false); // Penanda ragu-ragu untuk seluruh soal (PG + Essay)
+        let examStarted = false;
+        let timerInterval = null;
+        let totalSecondsRemaining = 90 * 60; // 90 Menit
+
+        // Inisialisasi Aplikasi Saat Memuat Halaman
+        window.onload = function() {
+            generateCBTGrid();
+        };
+
+        // Fungsi Membangun Grid Navigasi
+        function generateCBTGrid() {
+            const pgContainer = document.getElementById('grid-pg-container');
+            pgContainer.innerHTML = '';
+            for (let i = 0; i < 50; i++) {
+                const btn = document.createElement('button');
+                btn.id = `btn-nav-${i}`;
+                btn.type = 'button';
+                btn.className = 'w-full py-2 rounded-lg text-xs font-bold text-center border transition border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100';
+                btn.innerText = i + 1;
+                btn.onclick = () => selectQuestion(i);
+                pgContainer.appendChild(btn);
+            }
+
+            const essayContainer = document.getElementById('grid-essay-container');
+            essayContainer.innerHTML = '';
+            for (let i = 0; i < 5; i++) {
+                const btn = document.createElement('button');
+                const idx = 50 + i;
+                btn.id = `btn-nav-${idx}`;
+                btn.type = 'button';
+                btn.className = 'w-full py-2 rounded-lg text-xs font-bold text-center border transition border-purple-200 bg-purple-50 text-purple-700 hover:bg-purple-100';
+                btn.innerText = `E${i + 1}`;
+                btn.onclick = () => selectQuestion(idx);
+                essayContainer.appendChild(btn);
+            }
+        }
+
+        // Fungsi Mulai Ujian (Login Form Submit)
+        document.getElementById('identity-form').onsubmit = function(e) {
+            e.preventDefault();
+            const namaVal = document.getElementById('tnama').value.trim();
+            const kelasVal = document.getElementById('kelas').value;
+
+            if (!namaVal) {
+                alert("Harap masukkan nama lengkap Anda!");
+                return;
+            }
+
+            // Atur Informasi Peserta
+            document.getElementById('display-student-info').innerText = `${namaVal} (${kelasVal})`;
+            
+            // Sembunyikan Form Identitas & Tampilkan Dashboard Ujian
+            document.getElementById('identity-section').classList.add('hidden');
+            document.getElementById('exam-dashboard').classList.remove('hidden');
+            document.getElementById('exam-timer-wrapper').classList.remove('hidden');
+
+            examStarted = true;
+            startTimer();
+            loadQuestion(0);
+        };
+
+        // Kontrol Penghitung Waktu Mundur
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                if (totalSecondsRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    autoSubmitExam();
+                } else {
+                    totalSecondsRemaining--;
+                    const minutes = Math.floor(totalSecondsRemaining / 60);
+                    const seconds = totalSecondsRemaining % 60;
+                    document.getElementById('timer-countdown').innerText = 
+                        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    
+                    // Efek warna peringatan ketika waktu < 5 menit
+                    if (totalSecondsRemaining < 300) {
+                        const timerBox = document.getElementById('timer-countdown').parentElement;
+                        timerBox.classList.remove('bg-amber-500');
+                        timerBox.classList.add('bg-rose-600', 'text-white');
+                    }
+                }
+            }, 1000);
+        }
+
+        // Fungsi Memuat Butir Soal ke Layar Utama
+        function loadQuestion(index) {
+            currentQuestionIndex = index;
+
+            // Sembunyikan elemen opsional terlebih dahulu
+            document.getElementById('question-code-block').classList.add('hidden');
+            document.getElementById('options-container').classList.add('hidden');
+            document.getElementById('essay-container').classList.add('hidden');
+
+            // Reset UI status ragu-ragu
+            document.getElementById('doubt-checkbox').checked = doubtStates[index];
+
+            // Tampilkan nomor soal aktif
+            document.getElementById('display-question-number').innerText = index + 1;
+
+            // Cek jika nomor soal termasuk PG atau Essay
+            if (index < 50) {
+                // Tipe Pilihan Ganda
+                const item = PG_QUESTIONS[index];
+                document.getElementById('question-badge-type').innerText = "Pilihan Ganda (2 Poin)";
+                document.getElementById('question-badge-type').className = "bg-indigo-100 text-indigo-800 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider";
+                
+                document.getElementById('question-text').innerHTML = item.q;
+
+                // Render Opsi Jawaban A, B, C, D, E
+                const optsContainer = document.getElementById('options-container');
+                optsContainer.innerHTML = '';
+                optsContainer.classList.remove('hidden');
+
+                item.o.forEach((opt, oIdx) => {
+                    const isSelected = studentAnswersPG[index] === oIdx;
+                    
+                    const optBtn = document.createElement('button');
+                    optBtn.type = 'button';
+                    optBtn.className = `w-full text-left p-4 rounded-xl border transition flex items-start space-x-3 text-sm font-medium ${
+                        isSelected 
+                        ? 'border-indigo-600 bg-indigo-50/70 text-indigo-900 shadow-sm' 
+                        : 'border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-700'
+                    }`;
+                    
+                    optBtn.innerHTML = `
+                        <span class="w-6 h-6 rounded-full flex items-center justify-center border font-bold text-xs shrink-0 ${
+                            isSelected 
+                            ? 'bg-indigo-600 border-indigo-600 text-white' 
+                            : 'border-slate-300 text-slate-500 bg-slate-50'
+                        }">
+                            ${opt.charAt(0)}
+                        </span>
+                        <span class="flex-grow leading-relaxed">${opt.substring(3)}</span>
+                    `;
+                    optBtn.onclick = () => selectOption(index, oIdx);
+                    optsContainer.appendChild(optBtn);
+                });
+
+            } else {
+                // Tipe Essay HOTS
+                const essayIndex = index - 50;
+                const item = ESSAY_QUESTIONS[essayIndex];
+                document.getElementById('question-badge-type').innerText = "ESSAY HOTS (Analisis & Evaluasi)";
+                document.getElementById('question-badge-type').className = "bg-purple-100 text-purple-800 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider";
+                
+                document.getElementById('question-text').innerHTML = item.q;
+
+                // Tampilkan Code Block jika ada kode
+                if (item.code) {
+                    const codeBlock = document.getElementById('question-code-block');
+                    codeBlock.innerText = item.code;
+                    codeBlock.classList.remove('hidden');
+                }
+
+                // Render Input Text Area
+                const essayInput = document.getElementById('essay-answer-input');
+                essayInput.value = studentAnswersEssay[essayIndex];
+                
+                // Tambahkan event simpan otomatis sewaktu mengetik
+                essayInput.oninput = function() {
+                    studentAnswersEssay[essayIndex] = this.value;
+                    updateGridButtonState(index);
+                };
+
+                document.getElementById('essay-container').classList.remove('hidden');
+            }
+
+            // Update Tampilan Tombol Navigasi Atas & Bawah
+            document.getElementById('btn-prev-question').disabled = (index === 0);
+            document.getElementById('btn-prev-question').className = index === 0 
+                ? 'opacity-50 pointer-events-none bg-slate-100 text-slate-400 py-2.5 px-5 rounded-lg text-sm flex items-center space-x-2'
+                : 'bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 px-5 rounded-lg text-sm transition flex items-center space-x-2 cursor-pointer';
+
+            if (index === 54) {
+                document.getElementById('btn-next-question').innerHTML = '<span>Selesai & Kirim</span><span>📥</span>';
+                document.getElementById('btn-next-question').className = 'w-full sm:w-auto bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 px-5 rounded-lg text-sm transition flex justify-center items-center space-x-2';
+            } else {
+                document.getElementById('btn-next-question').innerHTML = '<span>Selanjutnya</span><span>➡️</span>';
+                document.getElementById('btn-next-question').className = 'w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-5 rounded-lg text-sm transition flex justify-center items-center space-x-2';
+            }
+
+            // Perbarui status fokus nomor di grid peta navigasi
+            updateGridStyles();
+        }
+
+        // Fungsi Memilih Jawaban Opsi Pilihan Ganda
+        function selectOption(qIdx, optIdx) {
+            studentAnswersPG[qIdx] = optIdx;
+            
+            // Segera render ulang opsi jawaban untuk efek seleksi visual
+            loadQuestion(qIdx);
+            
+            // Perbarui status warna grid navigasi
+            updateGridButtonState(qIdx);
+            updateStatsCounter();
+        }
+
+        // Fungsi Berpindah Soal Melalui Tombol Navigasi Bawah
+        function navigateQuestion(direction) {
+            const nextIdx = currentQuestionIndex + direction;
+            if (nextIdx >= 0 && nextIdx < 55) {
+                loadQuestion(nextIdx);
+            } else if (nextIdx === 55) {
+                // Jika melebihi soal terakhir, arahkan untuk submit ujian
+                confirmSubmitExam();
+            }
+        }
+
+        // Lompat ke Nomor Tertentu via Grid
+        function selectQuestion(idx) {
+            loadQuestion(idx);
+        }
+
+        // Toggle Status Ragu-ragu
+        function toggleDoubtState() {
+            doubtStates[currentQuestionIndex] = !doubtStates[currentQuestionIndex];
+            document.getElementById('doubt-checkbox').checked = doubtStates[currentQuestionIndex];
+            updateGridButtonState(currentQuestionIndex);
+        }
+
+        // Memperbarui Satu Tombol Grid Berdasarkan Input Siswa
+        function updateGridButtonState(index) {
+            const btn = document.getElementById(`btn-nav-${index}`);
+            if (!btn) return;
+
+            const isDoubt = doubtStates[index];
+            const isPG = index < 50;
+            
+            let isAnswered = false;
+            if (isPG) {
+                isAnswered = (studentAnswersPG[index] !== null);
+            } else {
+                isAnswered = (studentAnswersEssay[index - 50].trim().length > 0);
+            }
+
+            // Bersihkan kelas warna lama
+            btn.className = "w-full py-2 rounded-lg text-xs font-bold text-center border transition ";
+
+            if (isDoubt) {
+                // State Ragu Ragu (Oranye)
+                btn.className += "border-amber-400 bg-amber-400 text-white shadow-sm shadow-amber-400/20";
+            } else if (isAnswered) {
+                // State Sudah Dijawab (Hijau)
+                if (isPG) {
+                    btn.className += "border-emerald-500 bg-emerald-500 text-white shadow-sm shadow-emerald-500/20";
+                } else {
+                    btn.className += "border-purple-600 bg-purple-600 text-white shadow-sm shadow-purple-600/20";
+                }
+            } else {
+                // State Belum Dijawab (Default/Kosong)
+                if (isPG) {
+                    btn.className += "border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100";
+                } else {
+                    btn.className += "border-purple-200 bg-purple-50 text-purple-700 hover:bg-purple-100";
+                }
+            }
+
+            // Jaga border penanda aktif saat ini tetap tebal
+            if (index === currentQuestionIndex) {
+                btn.className += " ring-2 ring-indigo-900 ring-offset-1";
+            }
+        }
+
+        // Sinkronisasi Seluruh Tampilan Grid
+        function updateGridStyles() {
+            for (let i = 0; i < 55; i++) {
+                updateGridButtonState(i);
+            }
+        }
+
+        // Perbarui Statistik Ringkasan Sidebar
+        function updateStatsCounter() {
+            const answeredCount = studentAnswersPG.filter(ans => ans !== null).length;
+            document.getElementById('stat-answered').innerText = `${answeredCount}/50 PG`;
+            document.getElementById('stat-unanswered').innerText = `${50 - answeredCount} PG`;
+        }
+
+        // Tampilkan Modal Konfirmasi Kustom (Mengganti window.alert/confirm)
+        function showModal(title, msg, onConfirm) {
+            const modal = document.getElementById('custom-modal');
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerHTML = msg;
+            
+            const confirmBtn = document.getElementById('modal-btn-confirm');
+            confirmBtn.onclick = function() {
+                onConfirm();
+                closeModal();
+            };
+            
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        // Prosedur Kirim & Kunci Jawaban Ujian
+        function confirmSubmitExam() {
+            const emptyPG = studentAnswersPG.filter(ans => ans === null).length;
+            const emptyEssay = studentAnswersEssay.filter(ans => ans.trim() === "").length;
+            
+            let alertMsg = "Apakah Anda yakin ingin menyelesaikan dan mengakhiri sesi ujian ini?";
+            
+            if (emptyPG > 0 || emptyEssay > 0) {
+                alertMsg += `<br><br><span class="text-rose-600 font-bold">⚠️ Perhatian! Masih terdapat ${emptyPG} soal Pilihan Ganda dan ${emptyEssay} soal Essay yang belum Anda isi.</span>`;
+            }
+
+            showModal("Konfirmasi Selesai Ujian", alertMsg, function() {
+                submitExam();
+            });
+        }
+
+        // Auto Submit Jika Waktu Habis
+        function autoSubmitExam() {
+            showModal("Waktu Ujian Habis", "Sesi pengerjaan Anda telah selesai. Sistem otomatis mengunci dan mengirim jawaban Anda.", function() {
+                submitExam();
+            });
+        }
+
+        // Hitung Hasil Skor PG & Konversi Layar ke Screen Result
+        function submitExam() {
+            clearInterval(timerInterval);
+            examStarted = false;
+
+            // Hitung Jawaban Benar PG
+            let correctCount = 0;
+            PG_QUESTIONS.forEach((item, index) => {
+                if (studentAnswersPG[index] === item.a) {
+                    correctCount++;
+                }
+            });
+
+            const incorrectCount = 50 - correctCount;
+            const finalScorePG = correctCount * 2; // Maksimal skor PG = 100
+
+            // Isi nilai ringkasan ke elemen Result Screen
+            document.getElementById('res-student-name').innerText = document.getElementById('tnama').value.trim();
+            document.getElementById('res-student-class').innerText = document.getElementById('kelas').value;
+            
+            document.getElementById('res-score').innerText = `${finalScorePG} / 100`;
+            document.getElementById('res-correct').innerText = correctCount;
+            document.getElementById('res-incorrect').innerText = incorrectCount;
+
+            // Membangun daftar hasil tinjauan Essay untuk guru koreksi manual
+            const essayListContainer = document.getElementById('res-essay-list');
+            essayListContainer.innerHTML = '';
+
+            ESSAY_QUESTIONS.forEach((item, idx) => {
+                const answerText = studentAnswersEssay[idx].trim();
+                const containerDiv = document.createElement('div');
+                containerDiv.className = "bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-2";
+                
+                containerDiv.innerHTML = `
+                    <h4 class="font-bold text-slate-800 text-sm flex justify-between">
+                        <span>💡 Soal Essay ${idx + 1}</span>
+                        <span class="text-purple-700 font-semibold">[Evaluasi Manual]</span>
+                    </h4>
+                    <p class="text-xs text-slate-600 italic bg-white p-3 rounded-lg border border-slate-100 leading-relaxed">${item.q}</p>
+                    <div class="pt-2">
+                        <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">Jawaban Siswa:</span>
+                        <div class="font-mono text-xs text-slate-900 bg-slate-900 text-amber-300 p-4 rounded-lg whitespace-pre-wrap leading-relaxed border border-slate-800 min-h-[50px]">
+                            ${answerText ? escapeHTML(answerText) : '<span class="text-rose-400 font-semibold">TIDAK ADA JAWABAN (KOSONG)</span>'}
+                        </div>
+                    </div>
+                `;
+                
+                essayListContainer.appendChild(containerDiv);
+            });
+
+            // Sembunyikan Dashboard Ujian & Tampilkan Halaman Hasil
+            document.getElementById('exam-dashboard').classList.add('hidden');
+            document.getElementById('exam-timer-wrapper').classList.add('hidden');
+            document.getElementById('result-section').classList.remove('hidden');
+
+            // Scroll otomatis ke atas halaman hasil
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Utility untuk mengamankan teks html tag saat pencetakan data
+        function escapeHTML(str) {
+            return str
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
